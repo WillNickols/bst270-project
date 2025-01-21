@@ -1,19 +1,6 @@
 # BST 270: Individual Project
 
-This repository reproduces the figure from FiveThirtyEight's [Biden’s Cabinet Members Seem To Really Like Their Jobs](https://fivethirtyeight.com/features/biden-cabinet/).
-
-## Installation
-
-The GitHub can be cloned with TODO
-```{bash}
-git clone 
-```
-
-## Project Structure
-
-A complete code reproduction attempt is available at `./code/hate_crimes_reproduction.qmd`. This notebook utilize [Quarto](https://quarto.org) and can be compiled via the command line and/or various IDEs/text editors (e.g. RStudio, VSCode, Jupyter, Neovim, Emacs). Refer to Quarto's [Get Started](https://quarto.org/docs/get-started/) and [Using R](https://quarto.org/docs/computations/r.html) documentation pages for more information. Quarto documents can also be compiled into multiple different file formats -- the repository also contains HTML, PDF, Tex, and Markdown files.
-
-An image of the original plots is also provided in the `./data` directory.
+This repository reproduces the figures from FiveThirtyEight's [Dear Mona, Which State Has The Worst Drivers?](https://fivethirtyeight.com/features/which-state-has-the-worst-drivers/). Doing so will utilize data from the National Highway Traffic Safety Administration (2009, 2012) and National Association of Insurance Commissioners (2010, 2011).
 
 ### Getting Started
 
@@ -27,6 +14,12 @@ devtools::install_github("WillNickols/bst270-project", build_vignettes = TRUE,
     force = TRUE, dependencies = TRUE)
 browseVignettes('bst270')
 ```
+
+## Project Structure
+
+A complete reproduction is available in the included vignette. The vignette
+can be viewed with `browseVignettes('bst270')` as above. An image of the 
+original article is provided in the `inst/extdata` directory.
 
 ## Data
 
