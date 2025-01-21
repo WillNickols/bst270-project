@@ -16,32 +16,104 @@ This repository reproduces the figures from FiveThirtyEight's [Dear Mona, Which 
 
 ## Setup
 
-```{r, eval=FALSE}
-devtools::install_github('WillNickols/bst270-project', dependencies = TRUE)
+The package can be installed as described in the README: 
+```{eval = FALSE}
+if (!require("devtools", quietly = TRUE))
+    install.packages("devtools")
+    
+devtools::install_github("WillNickols/bst270-project", build_vignettes = TRUE,
+    force = TRUE, dependencies = TRUE)
+browseVignettes('bst270')
 ```
 
+The following code loads the required packages and reads the data in from this package's source.
 ```{r}
-library(ggplot2)
-library(dplyr)
+suppressPackageStartupMessages(library(ggplot2))
+suppressPackageStartupMessages(library(dplyr))
+library(bst270)
 
-dataset <- read.csv(system.file(package="bst-270","extdata","bad-drivers.csv"))
+dataset <- read.csv(system.file(package="bst270","extdata","bad-drivers.csv"))
 ```
 
 ## Reproducing Plots
 
-### Figure 1: TODO
+### Figure 1: Distracted drivers
 
-The first figure plots pre-election hate crime rates per 100,000 residents between 2010-2015 per data sourced from the FBI Uniform Crime Reporting Program.
+The following code reproduces the first figure from the article. It divides the
+number of fatal collisions per billion miles into those with distracted
+drivers and those without distracted drivers and plots a stacked bar plot.
 
+```{r, fig.align='center', fig.height=7, fig.width=6}
+# Create a data frame with the number of fatal collisions for
+# nondistracted and distracted drivers.
+fig1_df <- dataset %>%
+    mutate(nondistracted = Number.of.drivers.involved.in.fatal.collisions.per.billion.miles * 
+               (Percentage.Of.Drivers.Involved.In.Fatal.Collisions.Who.Were.Not.Distracted / 100),
+           distracted = Number.of.drivers.involved.in.fatal.collisions.per.billion.miles *  
+               (1 - Percentage.Of.Drivers.Involved.In.Fatal.Collisions.Who.Were.Not.Distracted / 100),
+           State = factor(State, rev(State))) %>%
+    select(State, nondistracted, distracted) %>%
+    reshape2::melt(id.vars = "State") %>%
+    mutate(variable = case_when(variable == 'distracted' ~ "TOTAL COLLISIONS PER BILLION MILES",
+                                variable == 'nondistracted' ~ "NON-DISTRACTED COLLISIONS PER BILLION MILES")) %>%
+    mutate(variable = factor(variable, levels = c("TOTAL COLLISIONS PER BILLION MILES",
+                                                  "NON-DISTRACTED COLLISIONS PER BILLION MILES")))
 
-## Limitations and Biases
+# Reproduce figure 1 using a stacked bar plot
+ggplot(fig1_df, aes(x = State, y = value, fill = variable)) + 
+    geom_bar(position = "stack", stat = "identity") + 
+    scale_fill_manual(values = c("NON-DISTRACTED COLLISIONS PER BILLION MILES" = "#f6b900", 
+                                "TOTAL COLLISIONS PER BILLION MILES" = "#f2dfa8")) + 
+    ggtitle('Drivers Involved in Fatal Collisions\nWho Were Not Distracted') + 
+    theme(
+        axis.title = element_blank(),
+        legend.title = element_blank(),
+        legend.position = 'top', 
+        legend.direction = 'vertical',
+        panel.grid.major.y = element_line(color = "darkgray"),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.ticks = element_blank()
+    ) + 
+    coord_flip()
+```
 
-The author mentions the following biases in the original data sources used:
+### Figure 2: Drivers without previous accidents
 
-> "The federal government doesn't track hate crimes systematically (agencies report to the FBI voluntarily), and the Southern Poverty Law Center uses media accounts and people's self-reports to assess the situation. Moreover, FBI hate crimes data for 2016 won't be released for another several months, and the Southern Poverty Law Center didn't collect data before the 2016 election. However, both data sources are publicly available and easy to navigate, which means they're some of the best we have.
->
-> But they also have biases baked in.
->
-> The FBI [Uniform Crime Reporting Program](https://ucr.fbi.gov/) collects hate crime data from law enforcement agencies. But because the data is submitted voluntarily, it's unclear how comprehensive the data set is. We don't have data from Hawaii, for instance. Moreover, the UCR Program collects data on only prosecutable hate *crimes*, which make up a fraction of hate *incidents* (which includes non-prosecutable offenses, such as circulation of [white nationalist recruitment materials](http://www.scpr.org/news/2016/11/16/66172/ucla-quickly-removes-white-nationalist-fliers-from/) on college campuses).
->
-> On the other hand, the Southern Poverty Law Center data --- which comes from a combination of curated media accounts and self-reported form entries --- includes both hate *crimes* and non-prosecutable hate *incidents*. Moreover, heightened news coverage of hate incidents after the election may have encouraged people to report incidents that they would not have otherwise reported. This is called awareness bias --- a trend that is well-established in epidemiology, [environmental health](http://journals.lww.com/epidem/Abstract/2000/03000/An_Exploration_of_Awareness_Bias_in_Two.20.aspx) and other fields of research that frequently use self-reported data."
+The following code reproduces the second figure from the article. It divides the
+number of fatal collisions per billion miles into those with a driver who
+had been in a previous accident and those without a driver who had been in a
+previous accident.
+
+```{r, fig.align='center', fig.height=7, fig.width=6}
+fig2_df <- dataset %>%
+    mutate(new = Number.of.drivers.involved.in.fatal.collisions.per.billion.miles * 
+               (Percentage.Of.Drivers.Involved.In.Fatal.Collisions.Who.Had.Not.Been.Involved.In.Any.Previous.Accidents / 100),
+           old = Number.of.drivers.involved.in.fatal.collisions.per.billion.miles *  
+               (1 - Percentage.Of.Drivers.Involved.In.Fatal.Collisions.Who.Had.Not.Been.Involved.In.Any.Previous.Accidents / 100),
+           State = factor(State, rev(State))) %>%
+    select(State, new, old) %>%
+    reshape2::melt(id.vars = "State") %>%
+    mutate(variable = case_when(variable == 'old' ~ "TOTAL COLLISIONS PER BILLION MILES",
+                                variable == 'new' ~ "COLLISIONS PER BILLION MILES OF DRIVERS W/O PREVIOUS ACCDIENTS")) %>%
+    mutate(variable = factor(variable, levels = c("TOTAL COLLISIONS PER BILLION MILES",
+                                                  "COLLISIONS PER BILLION MILES OF DRIVERS W/O PREVIOUS ACCDIENTS")))
+
+ggplot(fig2_df, aes(x = State, y = value, fill = variable)) + 
+    geom_bar(position = "stack", stat = "identity") + 
+    scale_fill_manual(values = c("COLLISIONS PER BILLION MILES OF DRIVERS W/O PREVIOUS ACCDIENTS" = "#44ab43", 
+                                "TOTAL COLLISIONS PER BILLION MILES" = "#bcdbbc")) + 
+    ggtitle('Drivers Involved in Fatal Collisions Who Had\nNot Been Involved In Any Previoius Accidents') + 
+    theme(
+        axis.title = element_blank(),
+        legend.title = element_blank(),
+        legend.position = 'top', 
+        legend.direction = 'vertical',
+        panel.grid.major.y = element_line(color = "darkgray"),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.ticks = element_blank()
+    ) + 
+    coord_flip()
+```
+

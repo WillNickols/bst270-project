@@ -17,9 +17,15 @@ An image of the original plots is also provided in the `./data` directory.
 
 ### Getting Started
 
-1.  Clone the GitHub repository.
-2.  Open the `hate_crimes_reproduction.qmd` file in R Studio (pre-requisite: install `usmap` and `ggplot2` R packages).
-3.  Click "Preview" or "Run" to execute the notebook.
+Use the following commands in Rstudio to install the 
+```
+if (!require("devtools", quietly = TRUE))
+    install.packages("devtools")
+    
+devtools::install_github("WillNickols/bst270-project", build_vignettes = TRUE,
+    force = TRUE, dependencies = TRUE)
+browseVignettes('bst270')
+```
 
 ## Data
 
