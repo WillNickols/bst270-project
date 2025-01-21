@@ -1,0 +1,47 @@
+---
+title: "BST 270 individual project: Bad Drivers"
+author:
+- name: William Nickols
+  email: willnickols@g.harvard.edu
+output: html_document
+vignette: >
+    %\VignetteIndexEntry{Tutorial}
+    %\VignetteEngine{knitr::rmarkdown}
+    %\VignetteEncoding{UTF-8}
+---
+
+#### Motivations and Reproducibility
+
+This repository reproduces the figures from FiveThirtyEight's [Dear Mona, Which State Has The Worst Drivers?](https://fivethirtyeight.com/features/which-state-has-the-worst-drivers/). Doing so will utilize data from the National Highway Traffic Safety Administration (2009, 2012) and National Association of Insurance Commissioners (2010, 2011).
+
+## Setup
+
+```{r, eval=FALSE}
+devtools::install_github('WillNickols/bst270-project', dependencies = TRUE)
+```
+
+```{r}
+library(ggplot2)
+library(dplyr)
+
+dataset <- read.csv(system.file(package="bst-270","extdata","bad-drivers.csv"))
+```
+
+## Reproducing Plots
+
+### Figure 1: TODO
+
+The first figure plots pre-election hate crime rates per 100,000 residents between 2010-2015 per data sourced from the FBI Uniform Crime Reporting Program.
+
+
+## Limitations and Biases
+
+The author mentions the following biases in the original data sources used:
+
+> "The federal government doesn't track hate crimes systematically (agencies report to the FBI voluntarily), and the Southern Poverty Law Center uses media accounts and people's self-reports to assess the situation. Moreover, FBI hate crimes data for 2016 won't be released for another several months, and the Southern Poverty Law Center didn't collect data before the 2016 election. However, both data sources are publicly available and easy to navigate, which means they're some of the best we have.
+>
+> But they also have biases baked in.
+>
+> The FBI [Uniform Crime Reporting Program](https://ucr.fbi.gov/) collects hate crime data from law enforcement agencies. But because the data is submitted voluntarily, it's unclear how comprehensive the data set is. We don't have data from Hawaii, for instance. Moreover, the UCR Program collects data on only prosecutable hate *crimes*, which make up a fraction of hate *incidents* (which includes non-prosecutable offenses, such as circulation of [white nationalist recruitment materials](http://www.scpr.org/news/2016/11/16/66172/ucla-quickly-removes-white-nationalist-fliers-from/) on college campuses).
+>
+> On the other hand, the Southern Poverty Law Center data --- which comes from a combination of curated media accounts and self-reported form entries --- includes both hate *crimes* and non-prosecutable hate *incidents*. Moreover, heightened news coverage of hate incidents after the election may have encouraged people to report incidents that they would not have otherwise reported. This is called awareness bias --- a trend that is well-established in epidemiology, [environmental health](http://journals.lww.com/epidem/Abstract/2000/03000/An_Exploration_of_Awareness_Bias_in_Two.20.aspx) and other fields of research that frequently use self-reported data."
