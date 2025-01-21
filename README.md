@@ -17,8 +17,8 @@ browseVignettes('bst270')
 
 ## Project Structure
 
-A complete reproduction is available in the included vignette. The vignette
-can be viewed with `browseVignettes('bst270')` as above. An image of the 
+The reproduction is available in the included vignette, which can be viewed 
+with `browseVignettes('bst270')` as above. An image of the 
 original article is provided in the `inst/extdata` directory.
 
 ## Data
@@ -27,9 +27,7 @@ Once the pacakge is installed, the data set used for the reproduction analysis
 is available at `system.file(package="bst270","extdata","bad-drivers.csv")`. 
 It is also available on [GitHub](https://github.com/fivethirtyeight/data/blob/master/bad-drivers/bad-drivers.csv).
 
-# Bad Drivers
-
-This folder contains data behind the story [Dear Mona, Which State Has The Worst Drivers?](http://fivethirtyeight.com/datalab/which-state-has-the-worst-drivers/)
+The schema and supporting sources are below:
 
 Variable | Source
 ---|---------
