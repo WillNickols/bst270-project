@@ -4,8 +4,8 @@ This repository reproduces the figures from FiveThirtyEight's [Dear Mona, Which 
 
 ### Getting Started
 
-Use the following commands in Rstudio to install the package and open the
-vignette containing the reproduced figures.
+Use the following commands in Rstudio to install the package and its 
+dependencies and open the vignette containing the reproduced figures. 
 ```
 if (!require("devtools", quietly = TRUE))
     install.packages("devtools")
@@ -18,8 +18,12 @@ browseVignettes('bst270')
 ## Project Structure
 
 The reproduction is available in the included vignette, which can be viewed 
-with `browseVignettes('bst270')` as above. An image of the 
+with `browseVignettes('bst270')` or 
+`vignette("bad_drivers_reproduction", package="bst270")`. An image of the 
 original article is provided in the `inst/extdata` directory.
+
+To view the source code, the whole package can be cloned from 
+`https://github.com/WillNickols/bst270-project/`.
 
 ## Data
 

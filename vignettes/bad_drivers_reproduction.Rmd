@@ -39,13 +39,15 @@ dataset <- read.csv(system.file(package="bst270","extdata","bad-drivers.csv"))
 
 ### Figure 1: Distracted drivers
 
-The following code reproduces the first figure from the article. It divides the
+The following code reproduces the first figure from the article. Since the
+original data contain the number of fatal collisions per billion miles
+and the proportion of those from distracted drivers, the code divides the
 number of fatal collisions per billion miles into those with distracted
 drivers and those without distracted drivers and plots a stacked bar plot.
 
 ```{r, fig.align='center', fig.height=7, fig.width=6}
 # Create a data frame with the number of fatal collisions for
-# nondistracted and distracted drivers.
+# nondistracted and distracted drivers per state.
 fig1_df <- dataset %>%
     mutate(nondistracted = Number.of.drivers.involved.in.fatal.collisions.per.billion.miles * 
                (Percentage.Of.Drivers.Involved.In.Fatal.Collisions.Who.Were.Not.Distracted / 100),
@@ -53,7 +55,7 @@ fig1_df <- dataset %>%
                (1 - Percentage.Of.Drivers.Involved.In.Fatal.Collisions.Who.Were.Not.Distracted / 100),
            State = factor(State, rev(State))) %>%
     select(State, nondistracted, distracted) %>%
-    reshape2::melt(id.vars = "State") %>%
+    reshape2::melt(id.vars = "State") %>% # Turn into long data
     mutate(variable = case_when(variable == 'distracted' ~ "TOTAL COLLISIONS PER BILLION MILES",
                                 variable == 'nondistracted' ~ "NON-DISTRACTED COLLISIONS PER BILLION MILES")) %>%
     mutate(variable = factor(variable, levels = c("TOTAL COLLISIONS PER BILLION MILES",
@@ -80,12 +82,16 @@ ggplot(fig1_df, aes(x = State, y = value, fill = variable)) +
 
 ### Figure 2: Drivers without previous accidents
 
-The following code reproduces the second figure from the article. It divides the
+The following code reproduces the second figure from the article. Since the
+original data contain the number of fatal collisions per billion miles
+and the proportion of those with previous accidents, the code divides the
 number of fatal collisions per billion miles into those with a driver who
 had been in a previous accident and those without a driver who had been in a
 previous accident.
 
 ```{r, fig.align='center', fig.height=7, fig.width=6}
+# Create a data frame with the number of fatal collisions for
+# first-accident and not-first-accident drivers per state.
 fig2_df <- dataset %>%
     mutate(new = Number.of.drivers.involved.in.fatal.collisions.per.billion.miles * 
                (Percentage.Of.Drivers.Involved.In.Fatal.Collisions.Who.Had.Not.Been.Involved.In.Any.Previous.Accidents / 100),
