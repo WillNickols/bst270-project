@@ -1,4 +1,4 @@
-Package: bst-270
+Package: bst270
 Title: Biostat 270 repository
 Version: 0.0.1
 Authors@R: 
@@ -12,6 +12,6 @@ RoxygenNote: 7.3.2
 Biarch: true
 Depends: 
     R (>= 3.4.0)
-Imports: dplyr, ggplot2, lubridate
+Imports: dplyr, ggplot2
 Suggests: knitr, testthat (>= 2.1.0), rmarkdown, markdown, kableExtra
 VignetteBuilder: knitr
